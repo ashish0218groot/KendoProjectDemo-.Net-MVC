@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Get";
+}
+
+<h2>Get</h2>
+
+<div class="row">
+    <div class="col-12">
+        @(Html.Kendo().Grid<KendoProjectDemo.Models.DataModel.Employees>()
+            .Name("grid1")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.FirstName).Title("First Name");
+                columns.Bound(p => p.LastName).Title("Last Name");
+                columns.Bound(p => p.DateOfBirth)
+                    .Title("Date of Birth")
+                    .Format("{0:MM/dd/yyyy}"); 
+            }) 
+            .DataSource(dataSource => dataSource
+                .Ajax() 
+                .Read(read => read.Action("ReadEmployees1", "Employee")) 
+            )
+        //.ClientDetailTemplateId("detail-template")
+        )
+    </div>
+</div>

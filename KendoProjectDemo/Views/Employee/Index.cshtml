@@ -1,0 +1,83 @@
+﻿@model IEnumerable<KendoProjectDemo.Models.DataModel.Employees>
+
+@{
+    ViewBag.Title = "Employee List";
+}
+
+<h2>Employee List</h2>
+<!-- Kendo UI CSS -->
+<!--<link href="https://kendo.cdn.telerik.com/2023.2.606/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="https://kendo.cdn.telerik.com/2023.2.606/styles/kendo.default.min.css" rel="stylesheet" />-->
+
+<!-- Kendo UI JavaScript -->
+<!--<script src="https://kendo.cdn.telerik.com/2023.2.606/js/jquery.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2023.2.606/js/kendo.all.min.js"></script>-->
+
+<script>
+    $(document).ready(function () {
+        kendo.culture("en-US");
+    });
+</script>
+
+<div class="row">
+    <div class="col-12">
+        @(Html.Kendo().Grid<KendoProjectDemo.Models.DataModel.Employees>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.FirstName).Title("First Name");
+                columns.Bound(p => p.LastName).Title("Last Name");
+                columns.Bound(p => p.DateOfBirth)
+                    .Title("Date of Birth")
+                    .Format("{0:MM/dd/yyyy}");
+                columns.Command(c =>
+                {
+                    c.Edit().Text("Edit");
+                    c.Destroy().Text("Delete");
+                }).Width(90);
+            })
+            .Editable(e => e.Mode(GridEditMode.InLine))
+            .ToolBar(c =>
+            {
+                c.Create().Text("Add Employee");
+             })
+            .Pageable()
+            .Sortable()
+            .Scrollable()
+            .Filterable()
+            .HtmlAttributes(new { style = "height:550px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax().Model(s => s.Id(m => m.Id))
+                .PageSize(5)
+                .Read(read => read.Action("ReadEmployees1", "Employee"))
+                .Create(c => c.Action("CreateEmployee", "Employee"))
+                .Update(c => c.Action("UpdateEmployee", "Employee"))
+                .Destroy(c => c.Action("DeleteEmployee", "Employee"))
+            )
+            .ClientDetailTemplateId("detail-template")
+        )
+    </div>
+</div>
+
+<script id="detail-template" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<KendoProjectDemo.Models.DataModel.Order>()
+        .Name("childGrid_#=Id#") // Unique name for each child grid
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Id);
+            columns.Bound(p => p.OrderDate);
+            columns.Bound(p => p.OrderNumber);
+            //columns.Bound(p => p.Employee.FirstName).Title("Employee");
+            columns.Bound(p => p.TotalAmount);
+        })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("ReadOrders", "Order", new { employeeId = "#=Id#" })) // Pass the employeeId as a route value
+        )
+        .ToClientTemplate()
+    )
+</script>
+
+
+
+
