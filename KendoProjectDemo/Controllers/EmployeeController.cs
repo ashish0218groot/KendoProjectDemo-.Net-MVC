@@ -50,17 +50,14 @@ namespace KendoProjectDemo.Controllers
         [HttpPost]
         public ActionResult CreateEmployee(Employees employee)
         {
-            employee.Id = Guid.NewGuid();
-            if (employee.Id != null)
+            if (ModelState.IsValid)
             {
                 employee.Id = Guid.NewGuid();
                 _dbContext.Employees.Add(employee);
                 _dbContext.SaveChanges();
-
-                return RedirectToAction("Index", "Employee");
             }
 
-            return View(employee);
+            return RedirectToAction("Index", "Employee");
         }
 
         [HttpPost]
