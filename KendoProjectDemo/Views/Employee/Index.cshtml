@@ -50,6 +50,7 @@
 </script>
 
 <div>
+    <button id="addEmployeeButton" class="k-button">Add Employee</button>
     <button id="deleteButton" class="k-button">Delete</button>
 </div>
 
@@ -68,7 +69,7 @@
                 columns.Command(c =>
                 {
                     c.Edit().Text("Edit");
-                    c.Destroy().Text("Delete");
+                    //c.Destroy().Text("Delete");
                 }).Width(90);
             })
             .Editable(e => e.Mode(GridEditMode.InLine))
@@ -112,3 +113,41 @@
         .ToClientTemplate()
     )
 </script>
+
+<script>
+    $(document).ready(function () {
+        // Event handler for Add Employee button
+        $("#addEmployeeButton").click(function () {
+            $.get("/Employee/AddedEmp", function (data) {
+                // Render the partial view in a specific area of the page
+            //    $("#addEmployeeContainer").html(data);
+            });
+        });
+    });
+
+    // Callback function to handle the success of adding an employee
+    function handleSuccess(data) {
+        if (data) {
+            alert("Employee added successfully!");
+            // Refresh the grid
+            $("#grid").data("kendoGrid").dataSource.read();
+            // Clear the form if needed
+            $("#addEmployeeForm")[0].reset();
+        } else {
+            alert("Failed to add employee!");
+        }
+    }
+
+
+</script>
+
+<script>
+$(document).ready(function () {
+         $("#addEmployeeButton").click(function () {
+            window.location.href = "/Employee/AddedEmp";
+        });
+    });
+</script>
+
+<!-- AddEmployeeContainer HTML element to hold the partial view -->
+<div id="addEmployeeContainer"></div>

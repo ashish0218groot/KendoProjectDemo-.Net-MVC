@@ -2713,6 +2713,8 @@
     <Content Include="Scripts\kendo\2023.2.606\cultures\kendo.culture.aa-ET.min.js.map" />
     <Content Include="Scripts\kendo\2023.2.606\cultures\kendo.culture.aa-ER.min.js.map" />
     <Content Include="Scripts\kendo\2023.2.606\cultures\kendo.culture.aa-DJ.min.js.map" />
+    <Content Include="Views\Shared\_AddEmployee.cshtml" />
+    <Content Include="Views\Employee\AddedEmp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

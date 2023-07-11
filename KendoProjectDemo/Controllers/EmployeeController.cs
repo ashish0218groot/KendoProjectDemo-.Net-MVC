@@ -24,11 +24,21 @@ namespace KendoProjectDemo.Controllers
         {
             return View();
         }
+        public ActionResult AddEmployee()
+        {
+            var model = new Employees();
+            return PartialView("_AddEmployee", model);
+        }
 
         public JsonResult ReadEmployees([DataSourceRequest] DataSourceRequest request)
         {
             var employees = _dbContext.Employees.ToList();
             return Json(employees.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddedEmp()
+        {
+            return View();
         }
 
         public JsonResult ReadEmployees1([DataSourceRequest] DataSourceRequest request)
@@ -38,14 +48,19 @@ namespace KendoProjectDemo.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreateEmployee([DataSourceRequest] DataSourceRequest request, Employees employee)
+        public ActionResult CreateEmployee(Employees employee)
         {
             employee.Id = Guid.NewGuid();
+            if (employee.Id != null)
+            {
+                employee.Id = Guid.NewGuid();
+                _dbContext.Employees.Add(employee);
+                _dbContext.SaveChanges();
 
-            _dbContext.Employees.Add(employee);
-            _dbContext.SaveChanges();
+                return RedirectToAction("Index", "Employee");
+            }
 
-            return Json(employee);
+            return View(employee);
         }
 
         [HttpPost]

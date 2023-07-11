@@ -1,0 +1,22 @@
+﻿@model KendoProjectDemo.Models.DataModel.Employees
+
+@using (Ajax.BeginForm("CreateEmployee", "Employee", null,
+        new AjaxOptions { HttpMethod = "POST", OnSuccess = "handleSuccess" }))
+{
+    <div>
+        @Html.LabelFor(model => Model.FirstName)
+        @Html.TextBoxFor(model => Model.FirstName)
+    </div>
+
+    <div>
+        @Html.LabelFor(model => Model.LastName)
+        @Html.TextBoxFor(model => Model.LastName)
+    </div>
+
+    <div>
+        @Html.LabelFor(model => Model.DateOfBirth)
+        @Html.TextBoxFor(model => Model.DateOfBirth, new {type="date"})
+    </div>
+
+    <input type="submit" value="Submit">
+}
