@@ -18,8 +18,8 @@ namespace KendoProjectDemo.Controllers
         public EmployeeController()
         {
             _dbContext = new EmployeeDbContext();
-
         }
+
         public ActionResult Index([DataSourceRequest] DataSourceRequest request)
         {
             return View();
@@ -36,15 +36,17 @@ namespace KendoProjectDemo.Controllers
             var employees = _dbContext.Employees.ToList();
             return Json(employees.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
         public JsonResult CreateEmployee([DataSourceRequest] DataSourceRequest request, Employees employee)
         {
             employee.Id = Guid.NewGuid();
-           
-                _dbContext.Employees.Add(employee);
-                _dbContext.SaveChanges();
-                return Json(employee); 
-         }
+
+            _dbContext.Employees.Add(employee);
+            _dbContext.SaveChanges();
+
+            return Json(employee);
+        }
 
         [HttpPost]
         public JsonResult UpdateEmployee([DataSourceRequest] DataSourceRequest request, Employees employee)
@@ -60,17 +62,18 @@ namespace KendoProjectDemo.Controllers
         }
 
         [HttpPost]
-        public JsonResult DeleteEmployee([DataSourceRequest] DataSourceRequest request, Guid id)
+        public JsonResult DeleteEmployee([DataSourceRequest] DataSourceRequest request, List<Guid> ids)
         {
-            var employee = _dbContext.Employees.Find(id);
-            if (employee != null)
+            var employeesToDelete = _dbContext.Employees.Where(e => ids.Contains(e.Id)).ToList();
+
+            foreach (var employee in employeesToDelete)
             {
                 _dbContext.Employees.Remove(employee);
-                _dbContext.SaveChanges();
-                return Json(id);
             }
 
-            return Json(null);
+            _dbContext.SaveChanges();
+
+            return Json(ids);
         }
 
         protected override void Dispose(bool disposing)
@@ -81,6 +84,5 @@ namespace KendoProjectDemo.Controllers
             }
             base.Dispose(disposing);
         }
-
     }
 }

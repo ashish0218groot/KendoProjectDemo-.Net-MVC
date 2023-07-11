@@ -5,19 +5,53 @@
 }
 
 <h2>Employee List</h2>
-<!-- Kendo UI CSS -->
-<!--<link href="https://kendo.cdn.telerik.com/2023.2.606/styles/kendo.common.min.css" rel="stylesheet" />
-<link href="https://kendo.cdn.telerik.com/2023.2.606/styles/kendo.default.min.css" rel="stylesheet" />-->
-
-<!-- Kendo UI JavaScript -->
-<!--<script src="https://kendo.cdn.telerik.com/2023.2.606/js/jquery.min.js"></script>
-<script src="https://kendo.cdn.telerik.com/2023.2.606/js/kendo.all.min.js"></script>-->
 
 <script>
     $(document).ready(function () {
         kendo.culture("en-US");
+
+        // Select All checkbox
+        $("#selectAll").click(function () {
+            $("input[name='selectedEmployees']").prop("checked", this.checked);
+        });
+
+        // Handle delete button click
+        $("#deleteButton").click(function () {
+            var selectedIds = [];
+
+            $("input[name='selectedEmployees']:checked").each(function () {
+                selectedIds.push($(this).val());
+            });
+
+            if (selectedIds.length > 0) {
+                $.ajax({
+                    url: "@Url.Action("DeleteEmployee", "Employee")",
+                    type: "POST",
+                    traditional: true,
+                    data: { ids: selectedIds },
+                    success: function (response) {
+                        if (response) {
+                            alert("Employees deleted successfully!");
+                            // Refresh the grid
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        } else {
+                            alert("Failed to delete employees!");
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while deleting employees.");
+                    }
+                });
+            } else {
+                alert("Please select at least one employee to delete.");
+            }
+        });
     });
 </script>
+
+<div>
+    <button id="deleteButton" class="k-button">Delete</button>
+</div>
 
 <div class="row">
     <div class="col-12">
@@ -25,6 +59,7 @@
             .Name("grid")
             .Columns(columns =>
             {
+                columns.Template(@<text></text>).ClientTemplate("<input type='checkbox' name='selectedEmployees' value='#=Id#' />").Width(40).HeaderTemplate("<input type='checkbox' id='selectAll' />").HtmlAttributes(new { style = "text-align: center;" });
                 columns.Bound(p => p.FirstName).Title("First Name");
                 columns.Bound(p => p.LastName).Title("Last Name");
                 columns.Bound(p => p.DateOfBirth)
@@ -37,10 +72,10 @@
                 }).Width(90);
             })
             .Editable(e => e.Mode(GridEditMode.InLine))
-            .ToolBar(c =>
+            .ToolBar(toolbar =>
             {
-                c.Create().Text("Add Employee");
-             })
+                toolbar.Create().Text("Add Employee");
+            })
             .Pageable()
             .Sortable()
             .Scrollable()
@@ -77,7 +112,3 @@
         .ToClientTemplate()
     )
 </script>
-
-
-
-
