@@ -1,0 +1,63 @@
+﻿@model KendoProjectDemo.Models.DataModel.Employees
+
+<div class="edit-form">
+    <h3>Edit Employee</h3>
+    <form id="editEmployeeForm">
+        <input type="hidden" name="Id" value="@Model.Id" />
+
+        <div class="form-group">
+            <label for="FirstName">First Name</label>
+            <input type="text" id="FirstName" name="FirstName" value="@Model.FirstName" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="LastName">Last Names</label>
+            <input type="text" id="LastName" name="LastName" value="@Model.LastName" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="DateOfBirth">DateOfBirth</label>
+            <input type="text" id="DateOfBirth" name="DateOfBirth" value="@Model.DateOfBirth" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#editEmployeeForm").submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            // Submit the form using AJAX
+
+            $.ajax({
+                url: "@Url.Action("UpdateEmployee","Employee")",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    if (response)
+                    {
+                        alert("Employee Updated Successfully");
+                        // Refresh the grid
+                        $("#grid").data("kendoGrid").dataSource.read();
+                        // Clear the form if needed
+                        $("#editEmployeeForm")[0].reset();
+                        // Close the modal
+                        $("#editEmployeeModal").modal("hide");
+                    }
+                    else
+                    {
+                        alert("Failed to update employee!");
+                    }
+                },
+                error: function ()
+                {
+                    alert("An error occurred when updating the employee");
+                }
+            });
+        });
+    });
+</script>

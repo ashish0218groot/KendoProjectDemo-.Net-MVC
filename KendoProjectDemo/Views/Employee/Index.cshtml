@@ -63,7 +63,7 @@
 
 </div>
 <div class="d-flex justify-content-end mb-3">
-    <button id="deleteButton" class="k-button" style="background-color: black; color: white;" >Delete</button>
+    <button id="deleteButton" class="k-button" style="background-color: black; color: white;">Delete</button>
 </div>
 
 <div class="row">
@@ -80,11 +80,10 @@
                     .Format("{0:MM/dd/yyyy}");
                 columns.Command(c =>
                 {
-                    c.Edit().Text("Edit");
-                    //c.Destroy().Text("Delete");
+                    c.Custom("Edit").Click("editEmployee");
                 }).Width(90);
             })
-            .Editable(e => e.Mode(GridEditMode.InLine))
+            //.Editable(e => e.Mode(GridEditMode.InLine))
             //.ToolBar(toolbar =>
             //{
             //    toolbar.Create().Text("Add Employee");
@@ -127,6 +126,11 @@
         .ToClientTemplate()
     )
 </script>
+
+
+
+
+
 
 <script>
     $(document).ready(function () {
@@ -207,6 +211,44 @@
   });
 });
 </script>
+
+
+<div id="editEmployeeModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editEmployee(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var employeeId = dataItem.Id;
+         $.ajax({
+            url: "@Url.Action("EditEmployee", "Employee")",
+            type: "GET",
+            data: { id: employeeId },
+            success: function (response) {
+
+                $("#editEmployeeModal .modal-body").html(response);
+                $("#editEmployeeModal").modal("show");
+            },
+            error: function () {
+                alert("An error occurred while loading the edit form.");
+            }
+        });
+    }
+</script>
+
 
 <script>
     $(document).ready(function () {

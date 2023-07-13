@@ -60,6 +60,8 @@ namespace KendoProjectDemo.Controllers
             return RedirectToAction("Index", "Employee");
         }
 
+
+
         [HttpPost]
         public JsonResult UpdateEmployee([DataSourceRequest] DataSourceRequest request, Employees employee)
         {
@@ -72,6 +74,18 @@ namespace KendoProjectDemo.Controllers
 
             return Json(null);
         }
+
+        public ActionResult EditEmployee(Guid id)
+        {
+            var employee = _dbContext.Employees.Find(id);
+            if (employee == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView("_updateEmployee", employee);
+        }
+
 
         [HttpPost]
         public JsonResult DeleteEmployee([DataSourceRequest] DataSourceRequest request, List<Guid> ids)
