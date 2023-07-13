@@ -3,19 +3,36 @@
 @using (Ajax.BeginForm("CreateEmployee", "Employee", null,
         new AjaxOptions { HttpMethod = "POST", OnSuccess = "handleSuccess" }))
 {
-    <div>
-        @Html.LabelFor(model => Model.FirstName)
-        @Html.TextBoxFor(model => Model.FirstName)
+
+    <h4>Add an Employee</h4>
+
+    <div class="row mb-2">
+        <div class="col-md-2">
+            @Html.LabelFor(model => Model.FirstName)
+        </div>
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => Model.FirstName)
+        </div>
     </div>
 
-    <div>
-        @Html.LabelFor(model => Model.LastName)
-        @Html.TextBoxFor(model => Model.LastName)
+    <div class="row mb-2">
+        <div class="col-md-2">
+            @Html.LabelFor(model => Model.LastName)
+        </div>
+
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => Model.LastName)
+        </div>
     </div>
 
-    <div>
-        @Html.LabelFor(model => Model.DateOfBirth)
-        @Html.TextBoxFor(model => Model.DateOfBirth, new {type="date"})
+    <div class="row mb-2">
+        <div class="col-md-2">
+            @Html.LabelFor(model => Model.DateOfBirth)
+        </div>
+
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => Model.DateOfBirth, new { type = "date" })
+        </div>
     </div>
 
     <input type="submit" value="Submit">

@@ -23,6 +23,7 @@
                 selectedIds.push($(this).val());
             });
 
+
             if (selectedIds.length > 0) {
                 $.ajax({
                     url: "@Url.Action("DeleteEmployee", "Employee")",
@@ -49,9 +50,20 @@
     });
 </script>
 
-<div>
-    <button id="addEmployeeButton" class="k-button">Add Employee</button>
-    <button id="deleteButton" class="k-button">Delete</button>
+
+
+<div class="row">
+    <div class="col-md-6  ">
+        @(Html.Partial("~/Views/Shared/_AddEmployee.cshtml"))
+    </div>
+
+    <div class="col-md-6  ">
+        @(Html.Partial("~/Views/Shared/_AddOrder.cshtml"))
+    </div>
+
+</div>
+<div class="d-flex justify-content-end mb-3">
+    <button id="deleteButton" class="k-button" style="background-color: black; color: white;" >Delete</button>
 </div>
 
 <div class="row">
@@ -73,10 +85,10 @@
                 }).Width(90);
             })
             .Editable(e => e.Mode(GridEditMode.InLine))
-            .ToolBar(toolbar =>
-            {
-                toolbar.Create().Text("Add Employee");
-            })
+            //.ToolBar(toolbar =>
+            //{
+            //    toolbar.Create().Text("Add Employee");
+            //})
             .Pageable()
             .Sortable()
             .Scrollable()
@@ -85,7 +97,7 @@
             .DataSource(dataSource => dataSource
                 .Ajax().Model(s => s.Id(m => m.Id))
                 .PageSize(5)
-                .Read(read => read.Action("ReadEmployees1", "Employee"))
+                .Read(read => read.Action("ReadEmployees1", "Employee")).Group(c => c.Add(g => g.FirstName))
                 .Create(c => c.Action("CreateEmployee", "Employee"))
                 .Update(c => c.Action("UpdateEmployee", "Employee"))
                 .Destroy(c => c.Action("DeleteEmployee", "Employee"))
@@ -94,6 +106,8 @@
         )
     </div>
 </div>
+
+<div id="orderFormContainer"></div>
 
 <script id="detail-template" type="text/kendo-tmpl">
     @(Html.Kendo().Grid<KendoProjectDemo.Models.DataModel.Order>()
@@ -120,7 +134,7 @@
         $("#addEmployeeButton").click(function () {
             $.get("/Employee/AddedEmp", function (data) {
                 // Render the partial view in a specific area of the page
-            //    $("#addEmployeeContainer").html(data);
+                //    $("#addEmployeeContainer").html(data);
             });
         });
     });
@@ -137,17 +151,72 @@
             alert("Failed to add employee!");
         }
     }
+</script>
 
 
+
+
+
+<script>
+   $(document).ready(function () {
+  // Event handler for "Add Order" button
+  $("#addOrderButton").click(function () {
+    var selectedEmployees = $("input[name='selectedEmployees']:checked");
+    if (selectedEmployees.length > 0) {
+      var employeeIds = selectedEmployees.map(function () {
+        return $(this).val();
+      }).get();
+
+      // Prepare the form data
+      var formData = {
+        request: { // DataSourceRequest object
+          page: 1, // Set the appropriate page number if needed
+          pageSize: 10, // Set the appropriate page size if needed
+          sort: null, // Set the sort configuration if needed
+          filter: null // Set the filter configuration if needed
+        },
+        ids: employeeIds, // Array of employee IDs
+        order: { // Order object
+            OrderNumber: $("#OrderNumber").val(), // Set the appropriate value
+            TotalAmount: parseInt($("#TotalAmount").val()), // Set the appropriate value
+            OrderDate: $("#OrderDate").val() // Set the appropriate value
+        }
+      };
+
+      // Submit the form using AJAX
+      $.ajax({
+        url: "@Url.Action("CreateOrder", "Order")",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function (response) {
+          if (response) {
+            alert("Order created successfully!");
+            // Perform any additional actions upon successful order creation
+          } else {
+            alert("Failed to create order!");
+          }
+        },
+        error: function () {
+          alert("An error occurred while creating the order.");
+        }
+      });
+    } else {
+      alert("Please select at least one employee to create an order.");
+    }
+  });
+});
 </script>
 
 <script>
-$(document).ready(function () {
-         $("#addEmployeeButton").click(function () {
+    $(document).ready(function () {
+        $("#addEmployeeButton").click(function () {
             window.location.href = "/Employee/AddedEmp";
         });
     });
 </script>
+
+
 
 <!-- AddEmployeeContainer HTML element to hold the partial view -->
 <div id="addEmployeeContainer"></div>

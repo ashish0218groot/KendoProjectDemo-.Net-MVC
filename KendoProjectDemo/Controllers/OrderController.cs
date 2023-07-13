@@ -13,14 +13,24 @@ namespace KendoProjectDemo.Controllers
     public class OrderController : Controller
     {
         private readonly EmployeeDbContext _dbContext;
-        public ActionResult Index()
-        {
-            return View();
-        }
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
 
         public OrderController()
         {
             _dbContext = new EmployeeDbContext();
+        }
+        public ActionResult Index()
+        {
+            // Retrieve the employees from the database
+            var employees = _dbContext.Employees.ToList();
+
+            // Assign the employees to the ViewBag
+            ViewBag.Employees = employees;
+
+            return View();
         }
 
         public JsonResult ReadOrders([DataSourceRequest] DataSourceRequest request, Guid employeeId)
@@ -29,19 +39,52 @@ namespace KendoProjectDemo.Controllers
             return Json(orders.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AddedOrder()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public JsonResult CreateOrder(Guid employeeId, Order order)
+        public JsonResult CreateOrder([DataSourceRequest] DataSourceRequest request, List<string> ids, Order order)
         {
             if (ModelState.IsValid)
             {
-                order.EmployeeId = employeeId;
-                _dbContext.Orders.Add(order);
+                if (ids != null)
+                {
+                    foreach (var employeeId in ids)
+                    {
+                        var parsedId = Guid.Parse(employeeId);
+                        var employee = _dbContext.Employees.FirstOrDefault(e => e.Id == parsedId);
+
+                        if (employee != null)
+                        {
+                            if (employee.Orders == null)
+                                employee.Orders = new List<Order>();
+
+                            var newGuid = Guid.NewGuid();
+                            var newOrder = new Order
+                            {
+                                Id = newGuid,
+                                OrderNumber = order.OrderNumber,
+                                TotalAmount = order.TotalAmount,
+                                OrderDate = order.OrderDate,
+                                EmployeeId = newGuid,
+                                Employee = employee
+                            };
+
+                            employee.Orders.Add(newOrder);
+                        }
+                    }
+                }
+
                 _dbContext.SaveChanges();
                 return Json(order);
             }
 
             return Json(null);
         }
+
+
 
         [HttpPost]
         public JsonResult UpdateOrder(Order order)

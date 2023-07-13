@@ -2715,11 +2715,12 @@
     <Content Include="Scripts\kendo\2023.2.606\cultures\kendo.culture.aa-DJ.min.js.map" />
     <Content Include="Views\Shared\_AddEmployee.cshtml" />
     <Content Include="Views\Employee\AddedEmp.cshtml" />
+    <Content Include="Views\Shared\_AddOrder.cshtml" />
+    <Content Include="Views\Order\AddedOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\ViewModel\" />
-    <Folder Include="Views\Order\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
