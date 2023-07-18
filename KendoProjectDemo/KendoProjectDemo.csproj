@@ -2718,6 +2718,7 @@
     <Content Include="Views\Shared\_AddOrder.cshtml" />
     <Content Include="Views\Order\AddedOrder.cshtml" />
     <Content Include="Views\Shared\_updateEmployee.cshtml" />
+    <Content Include="Views\Employee\SplitGridView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

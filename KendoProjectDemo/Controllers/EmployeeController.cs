@@ -41,6 +41,12 @@ namespace KendoProjectDemo.Controllers
             return View();
         }
 
+        public ActionResult SplitGridView()
+        {
+            return View();
+
+        }
+
         public JsonResult ReadEmployees1([DataSourceRequest] DataSourceRequest request)
         {
             var employees = _dbContext.Employees.ToList();

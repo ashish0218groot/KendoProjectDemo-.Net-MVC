@@ -33,9 +33,29 @@ namespace KendoProjectDemo.Controllers
             return View();
         }
 
-        public JsonResult ReadOrders([DataSourceRequest] DataSourceRequest request, Guid employeeId)
+        //public JsonResult ReadOrders([DataSourceRequest] DataSourceRequest request, Guid? employeeId)
+        //{
+        //    var orders = _dbContext.Orders.Where(o => o.EmployeeId == employeeId).ToList();
+        //    return Json(orders.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+        //}
+
+        public JsonResult ReadOrders([DataSourceRequest] DataSourceRequest request, Guid? employeeId)
         {
-            var orders = _dbContext.Orders.Where(o => o.EmployeeId == employeeId).ToList();
+            var orders = _dbContext.Orders.AsQueryable();
+
+
+            if (employeeId.HasValue)
+            {
+                orders = orders.Where(o => o.EmployeeId == employeeId.Value);
+            }
+
+            //orders = orders.Where(o => o.TotalAmount > 1000);
+            //orders = orders.OrderByDescending(o => o.OrderDate);
+            //// Execute the query and retrieve the results when needed
+           
+            //var ordersInfo = _dbContext.Orders.ToList();
+            //ordersInfo = ordersInfo.OrderByDescending(a => a.OrderNumber);
+
             return Json(orders.ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
 
