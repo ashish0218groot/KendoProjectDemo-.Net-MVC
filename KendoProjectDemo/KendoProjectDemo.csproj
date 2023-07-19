@@ -2719,6 +2719,7 @@
     <Content Include="Views\Order\AddedOrder.cshtml" />
     <Content Include="Views\Shared\_updateEmployee.cshtml" />
     <Content Include="Views\Employee\SplitGridView.cshtml" />
+    <Content Include="Views\Employee\SeprateGridView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

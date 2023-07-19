@@ -1,0 +1,63 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        @(Html.Kendo().Grid<KendoProjectDemo.Models.DataModel.Employees>()
+            .Name("employeeGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(e => e.FirstName).Title("First Name");
+                columns.Bound(e => e.LastName).Title("Last Name");
+                columns.Bound(e => e.DateOfBirth).Title("Date of Birth").Format("{0:MM/dd/yyyy}");
+            })
+            .Pageable()
+            .Selectable()
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("ReadEmployees", "Employee"))
+            )
+            .Events(events => events.Change("onEmployeeGridChange"))
+        )
+    </div>
+
+    <div class="col-md-8">
+        @(Html.Kendo().Grid<KendoProjectDemo.Models.DataModel.Order>()
+            .Name("orderGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(o => o.OrderNumber).Title("Order Number");
+                columns.Bound(o => o.OrderDate).Title("Order Date").Format("{0:MM/dd/yyyy}");
+                columns.Bound(o => o.TotalAmount).Title("Total Amount");
+            })
+            .Pageable()
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Action("ReadOrders", "Order").Data("getSelectedEmployeeId"))
+            )
+        )
+    </div>
+</div>
+
+<script>
+    function onEmployeeGridChange() {
+        var selectedEmployee = $("#employeeGrid").data("kendoGrid").select();
+
+        if (selectedEmployee.length) {
+            var dataItem = $("#employeeGrid").data("kendoGrid").dataItem(selectedEmployee);
+            var orderGrid = $("#orderGrid").data("kendoGrid");
+            orderGrid.dataSource.read({ employeeId: dataItem.Id });
+            orderGrid.refresh();
+        }
+    }
+
+    function getSelectedEmployeeId() {
+        var selectedEmployee = $("#employeeGrid").data("kendoGrid").select();
+
+        if (selectedEmployee.length) {
+            var dataItem = $("#employeeGrid").data("kendoGrid").dataItem(selectedEmployee);
+            return { employeeId: dataItem.Id };
+        }
+        return { employeeId : null }
+    }
+
+</script>
+
+

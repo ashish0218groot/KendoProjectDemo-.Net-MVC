@@ -46,6 +46,11 @@ namespace KendoProjectDemo.Controllers
             return View();
         }
 
+
+        public ActionResult SeprateGridView()
+        {
+            return View();
+        }
         public JsonResult ReadEmployees1([DataSourceRequest] DataSourceRequest request)
         {
             var employees = _dbContext.Employees.ToList();
