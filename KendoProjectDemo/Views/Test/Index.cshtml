@@ -1,0 +1,62 @@
+﻿@model KendoProjectDemo.Models.DataModel.Employees
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<div>
+    <h3>Passing data using Parameters</h3>
+
+    <section>
+        @using (Html.BeginForm("PostUsingParameters", "Test"))
+        {
+            <input type="text" name="FirstName" /> <br />
+            <input type="text" name="LastName" /> <br />
+            <input type="submit" name="Submit Here" />
+
+        }
+    </section>
+
+    <br />
+    <h3>Passing data using Request</h3>
+    <section>
+        @using (Html.BeginForm("PostUsingRequest", "Test"))
+        {
+            <input type="text" name="FirstName" /> <br />
+            <input type="text" name="LastName" /> <br />
+            <input type="submit" name="Submit Here" />
+
+        }
+    </section>
+
+    <br />
+    <h3>Passing data using FormData</h3>
+    <section>
+        @using (Html.BeginForm("PostUsingFormCollection", "Test"))
+        {
+            <input type="text" name="FirstName" /> <br />
+            <input type="text" name="LastName" /> <br />
+            <input type="submit" name="Submit Here" />
+
+        }
+    </section>
+
+
+    <br />
+    <h3>Passing data using ModelBinding</h3>
+    <section>
+        @using (Html.BeginForm("PostUsingModelBinding", "Test", FormMethod.Post))
+        {
+            @Html.LabelFor(a => a.FirstName)
+            @Html.TextBoxFor(a => a.FirstName)
+
+            @Html.LabelFor(a => a.LastName)
+            @Html.TextBoxFor(a => a.LastName)
+            <input type="submit" name="Submit Here" />
+
+        }
+    </section>
+</div>
+

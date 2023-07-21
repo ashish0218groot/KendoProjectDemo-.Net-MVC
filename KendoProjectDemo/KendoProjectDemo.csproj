@@ -274,6 +274,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2720,6 +2721,7 @@
     <Content Include="Views\Shared\_updateEmployee.cshtml" />
     <Content Include="Views\Employee\SplitGridView.cshtml" />
     <Content Include="Views\Employee\SeprateGridView.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
